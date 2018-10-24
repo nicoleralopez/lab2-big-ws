@@ -49,4 +49,47 @@ public class TranslatorEndpointTest {
     GetTranslationResponse translation = (GetTranslationResponse) response;
     assertThat(translation.getTranslation(), is("Esto es una prueba de servicio de traducción"));
   }
+
+  @Test
+  public void testSendAndReceiveToPortuguese() {
+    GetTranslationRequest request = new GetTranslationRequest();
+    request.setLangFrom("es");
+    request.setLangTo("pt");
+    request.setText("gracias");
+    Object response = new WebServiceTemplate(marshaller).marshalSendAndReceive("http://localhost:"
+            + port + "/ws", request);
+    assertNotNull(response);
+    assertThat(response, instanceOf(GetTranslationResponse.class));
+    GetTranslationResponse translation = (GetTranslationResponse) response;
+    assertThat(translation.getTranslation(), is("obrigado"));
+  }
+
+  @Test
+  public void testSendAndReceiveFromPortuguese() {
+    GetTranslationRequest request = new GetTranslationRequest();
+    request.setLangFrom("pt");
+    request.setLangTo("es");
+    request.setText("Eu quero morar sozinho");
+    Object response = new WebServiceTemplate(marshaller).marshalSendAndReceive("http://localhost:"
+            + port + "/ws", request);
+    assertNotNull(response);
+    assertThat(response, instanceOf(GetTranslationResponse.class));
+    GetTranslationResponse translation = (GetTranslationResponse) response;
+    assertThat(translation.getTranslation(), is("Yo quiero vivir solo"));
+  }
+
+  @Test
+  public void testSendAndReceiveEnglishToSwedish() {
+    GetTranslationRequest request = new GetTranslationRequest();
+    request.setLangFrom("en");
+    request.setLangTo("sv");
+    request.setText("thanks");
+    Object response = new WebServiceTemplate(marshaller).marshalSendAndReceive("http://localhost:"
+            + port + "/ws", request);
+    assertNotNull(response);
+    assertThat(response, instanceOf(GetTranslationResponse.class));
+    GetTranslationResponse translation = (GetTranslationResponse) response;
+    assertThat(translation.getTranslation(), is("tack"));
+  }
+
 }
